@@ -473,11 +473,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           child: SingleChildScrollView(
                             child: widget._customContent ??
                                 Text(
-                                  "${-(contentSize.height + PopupConstants.defaultArrowSize.height)}" +
-                                      (_targetWidgetRect.top <
-                                              context.screenHeight / 2)
-                                          .toString() +
-                                      (widget._contentTitle ?? ''),
+                                  widget._contentTitle ?? '',
                                   style: widget._contentTheme.infoTextStyle,
                                   textAlign: widget._contentTheme.infoTextAlign,
                                 ),
