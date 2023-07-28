@@ -139,7 +139,13 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
 
   Offset get _indicatorOffset {
     final double indicatorWidth = widget._indicatorTheme.arrowSize.width;
-    switch (widget._indicatorTheme.arrowDirection) {
+
+    final ArrowDirection customDirection =
+        _targetWidgetRect.top < context.screenHeight / 2
+            ? ArrowDirection.up
+            : ArrowDirection.down;
+
+    switch (customDirection) {
       case ArrowDirection.up:
         return Offset(
               _targetWidgetRect.width / 2 - indicatorWidth / 2,
@@ -164,7 +170,12 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
       highlightVerticalGap = widget._highLightTheme.padding.bottom;
     }
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    final ArrowDirection customDirection =
+        _targetWidgetRect.top < context.screenHeight / 2
+            ? ArrowDirection.up
+            : ArrowDirection.down;
+
+    switch (customDirection) {
       case ArrowDirection.up:
         return Offset(0, highlightVerticalGap);
       case ArrowDirection.down:
@@ -180,8 +191,12 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double targetWidth = _targetWidgetRect.width;
     final double targetHeight = _targetWidgetRect.height;
     final double contentDxCenter = targetWidth / 2 - contentWidth / 2;
+    final ArrowDirection customDirection =
+        _targetWidgetRect.top < context.screenHeight / 2
+            ? ArrowDirection.up
+            : ArrowDirection.down;
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (customDirection) {
       case ArrowDirection.up:
         targetCenterOffset = Offset(
           contentDxCenter,
@@ -299,8 +314,12 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double bottomPadding = context.mediaQuery.padding.bottom;
     final double topPadding = context.mediaQuery.padding.top;
     final double targetWidgetTopPosition = _targetWidgetRect.top;
+    final ArrowDirection customDirection =
+        _targetWidgetRect.top < context.screenHeight / 2
+            ? ArrowDirection.up
+            : ArrowDirection.down;
 
-    switch (widget._indicatorTheme.arrowDirection) {
+    switch (customDirection) {
       case ArrowDirection.up:
         final double belowSpace = screenHeight -
             targetWidgetTopPosition -
@@ -372,6 +391,25 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                   _dismissBehaviorIsOnTapContent ? null : context.screenWidth,
               child: Column(
                 children: <Widget>[
+                  // CompositedTransformFollower(
+                  //   link: widget._layerLink,
+                  //   showWhenUnlinked: false,
+                  //   offset: _indicatorOffset,
+                  //   child: AnimatedScale(
+                  //     scale: _isLayoutMounted ? 1.0 : 0.0,
+                  //     duration: const Duration(milliseconds: 50),
+                  //     alignment: Alignment.topCenter,
+                  //     child: CustomPaint(
+                  //       size: widget._indicatorTheme.arrowSize,
+                  //       painter: widget._indicatorTheme.arrowPainter ??
+                  //           ArrowIndicatorPainter(
+                  //             arrowDirection:
+                  //                 widget._indicatorTheme.arrowDirection,
+                  //             arrowColor: widget._indicatorTheme.color,
+                  //           ),
+                  //     ),
+                  //   ),
+                  // ),
                   CompositedTransformFollower(
                     link: widget._layerLink,
                     showWhenUnlinked: false,
@@ -394,7 +432,16 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                   CompositedTransformFollower(
                     link: widget._layerLink,
                     showWhenUnlinked: false,
-                    offset: _bodyOffset,
+                    offset: _targetWidgetRect.top < context.screenHeight / 2
+                        ? Offset(
+                            0, 24 + PopupConstants.defaultArrowSize.height + 3)
+
+                        /// 24 is an info item height and 3 is a padding
+                        : Offset(
+                            0,
+                            -(contentSize.height +
+                                PopupConstants.defaultArrowSize.height +
+                                3)),
                     child: AnimatedScale(
                       scale: _isLayoutMounted ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 50),
@@ -426,7 +473,11 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           child: SingleChildScrollView(
                             child: widget._customContent ??
                                 Text(
-                                  widget._contentTitle ?? '',
+                                  "${-(contentSize.height + PopupConstants.defaultArrowSize.height)}" +
+                                      (_targetWidgetRect.top <
+                                              context.screenHeight / 2)
+                                          .toString() +
+                                      (widget._contentTitle ?? ''),
                                   style: widget._contentTheme.infoTextStyle,
                                   textAlign: widget._contentTheme.infoTextAlign,
                                 ),
