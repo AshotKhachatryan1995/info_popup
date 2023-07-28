@@ -1,3 +1,7 @@
+## CHANGES
+
+Change popup entry position, if it's position dy is less than half of screenHeight then it's need to be open from bottom of item, else it's will open from top of item.
+
 ## Introduction
 
 The `info_popup` package allows you to easily show a **simple**, **customizable** popup on your wrapped widget. The **highlight feature**, which can be activated at will, helps draw the user's attention to the desired location. 
