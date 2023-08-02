@@ -217,13 +217,19 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
     final double contentRight = contentLeft + contentWidth;
     final double screenWidth = context.screenWidth;
 
+    late Offset mainOffset = targetCenterOffset;
+
     if (contentLeft < 0) {
       targetCenterOffset += Offset(-contentLeft, 0);
+
+      mainOffset = targetCenterOffset + widget._contentOffset;
     } else if (contentRight > screenWidth) {
       targetCenterOffset += Offset(screenWidth - contentRight, 0);
+
+      mainOffset = targetCenterOffset - widget._contentOffset;
     }
 
-    return targetCenterOffset + widget._contentOffset;
+    return mainOffset;
   }
 
   Size? _contentSize;
@@ -432,13 +438,14 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                   CompositedTransformFollower(
                     link: widget._layerLink,
                     showWhenUnlinked: false,
+                    // offset: _bodyOffset,
                     offset: _targetWidgetRect.top < context.screenHeight / 2
-                        ? Offset(
-                            0, 24 + PopupConstants.defaultArrowSize.height + 3)
+                        ? Offset(_bodyOffset.dx,
+                            24 + PopupConstants.defaultArrowSize.height + 3)
 
                         /// 24 is an info item height and 3 is a padding
                         : Offset(
-                            0,
+                            _bodyOffset.dx,
                             -(contentSize.height +
                                 PopupConstants.defaultArrowSize.height +
                                 3)),
@@ -473,7 +480,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           child: SingleChildScrollView(
                             child: widget._customContent ??
                                 Text(
-                                  widget._contentTitle ?? '',
+                                  "$_bodyOffset" + (widget._contentTitle ?? ''),
                                   style: widget._contentTheme.infoTextStyle,
                                   textAlign: widget._contentTheme.infoTextAlign,
                                 ),
