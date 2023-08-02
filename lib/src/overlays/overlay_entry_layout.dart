@@ -480,7 +480,7 @@ class _OverlayInfoPopupState extends State<OverlayInfoPopup> {
                           child: SingleChildScrollView(
                             child: widget._customContent ??
                                 Text(
-                                  "$_bodyOffset" + (widget._contentTitle ?? ''),
+                                  widget._contentTitle ?? '',
                                   style: widget._contentTheme.infoTextStyle,
                                   textAlign: widget._contentTheme.infoTextAlign,
                                 ),
